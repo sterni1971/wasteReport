@@ -31,10 +31,21 @@ class Job():
     def __init__(self,jobdata):
         #JobID,UID,GID,Account,CPUTimeRAW,TotalCPU
         (self.jobid,self.uid,self.gid,self.account,self.partition,self.cputimeraw,self.totalcpu)=jobdata
-	self.uid=int(self.uid)
-	self.gid=int(self.gid)
+
+        try:
+            self.uid=int(self.uid)
+        except ValueError:
+            print("WARN: Job {0}: Invalid userid: {1}".format(self.uid))
+            self.uid=0
+
+        self.gid=int(self.gid)
         self.cputimeraw=int(self.cputimeraw)
-        self.totalcpu=mkSecond(self.totalcpu)
+        try:
+            self.totalcpu=mkSecond(self.totalcpu)
+        except ValueError:
+            print("WARN: Job {0}: Couldn't convert TotalCPU time string into seconds: {1}".format(self.totalcpu))
+            self.totalcpu=0
+
         self.user=pwd.getpwuid(self.uid).pw_name
         self.group=grp.getgrgid(self.gid).gr_name
 
@@ -124,5 +135,5 @@ if __name__ == "__main__":
 
     resHash=jobs.getStat(args.statKey)
     for u in sorted(resHash,key=lambda x: resHash[x][args.order],reverse=args.reverse):
-        print("{}:{},Efficiency:{:.1f}%,LostSeconds:{}".format(args.statKey,u,resHash[u]['Efficiency'],resHash[u]['LostSeconds']))
+        print("{0}:{1},Efficiency:{2:.1f}%,LostSeconds:{3}".format(args.statKey,u,resHash[u]['Efficiency'],resHash[u]['LostSeconds']))
 
