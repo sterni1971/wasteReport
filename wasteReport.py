@@ -35,7 +35,7 @@ class Job():
         try:
             self.uid=int(self.uid)
         except ValueError:
-            print("WARN: Job {0}: Invalid userid: {1}".format(self.uid))
+            print("WARN: Job {0}: Invalid userid: {1}".format(self.jobid,self.uid))
             self.uid=0
 
         self.gid=int(self.gid)
@@ -43,7 +43,7 @@ class Job():
         try:
             self.totalcpu=mkSecond(self.totalcpu)
         except ValueError:
-            print("WARN: Job {0}: Couldn't convert TotalCPU time string into seconds: {1}".format(self.totalcpu))
+            print("WARN: Job {0}: Couldn't convert TotalCPU time string into seconds: {1}".format(self.jobid,self.totalcpu))
             self.totalcpu=0
 
         self.user=pwd.getpwuid(self.uid).pw_name
