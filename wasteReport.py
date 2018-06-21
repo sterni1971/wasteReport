@@ -70,8 +70,13 @@ class Jobstore(object):
             self.resStat[self.id]['JOBCNT']+=1
 
         for self.r in self.resStat.keys():
-            self.resStat[self.r]['LostSeconds']=self.resStat[self.r]['CPUTimeRAW']-self.resStat[self.r]['TotalCPU']
-            self.resStat[self.r]['Efficiency']=self.resStat[self.r]['TotalCPU']*100/float(self.resStat[self.r]['CPUTimeRAW'])
+            #print("{} : {}".format(self.resStat[self.r],self.resStat[self.r]['CPUTimeRAW']))
+            if self.resStat[self.r]['CPUTimeRAW']==0:
+                self.resStat[self.r]['LostSeconds']=0
+                self.resStat[self.r]['Efficiency']=0
+            else:
+                self.resStat[self.r]['LostSeconds']=self.resStat[self.r]['CPUTimeRAW']-self.resStat[self.r]['TotalCPU']
+                self.resStat[self.r]['Efficiency']=self.resStat[self.r]['TotalCPU']*100/float(self.resStat[self.r]['CPUTimeRAW'])
 
         return self.resStat
 
